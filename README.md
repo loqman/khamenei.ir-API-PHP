@@ -3,7 +3,7 @@ Khamenei.ir PHP API Interface
 
 for more information see: http://farsi.khamenei.ir/help-content?id=21881
 
-''' Usage
+=== Usage
 News types
 
 ```php
@@ -46,4 +46,4 @@ News types
     TYPE_ESTEFTAAT              => استفتائات
     TYPE_QUICK_REVIEW           => مرور سریع
     TYPE_DIARY                  => روزنگار
-php```
+```
