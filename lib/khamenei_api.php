@@ -77,6 +77,9 @@ class KhameneiAPI {
     const TYPE_ESTEFTAAT = 48;
     const TYPE_QUICK_REVIEW = 49;
     const TYPE_DIARY = 50;
+
+    // uri: http://farsi.khamenei.ir/developer/api/news?news_type={$type}&limit={$number}
+    const BASE_URI = "http://farsi.khamenei.ir/developer/api/news?";
     /* ==================== */
 
     /* API Parameters       */
@@ -87,9 +90,120 @@ class KhameneiAPI {
     private $news_id = 1;
     private $from_year = 1368; // minimum is the default value
     private $to_year = 1392; // maximum is current year
-    private $response_format = rss; // only this format is available at the time
+    private $response_format = "rss"; // only this format is available at the time
     private $return_body = true;
     private $return_lead = false;
     private $order = 0;
+
+    private $api_uri;
     /* ===================== */
+
+    public function __construct()
+    {
+
+    }
+
+    public function type($type)
+    {
+        $this->news_type = $type;
+        return $this;
+    }
+
+    public function version($version)
+    {
+        $this->version = $version;
+        return $this;
+    }
+
+    public function limit($limit)
+    {
+        $this->limit = $limit;
+        return $this;
+    }
+
+    public function offset($offset)
+    {
+        $this->offset = $offset;
+        return $this;
+    }
+
+    public function news_id($id)
+    {
+        $this->news_id = $id;
+        return $this;
+    }
+
+    public function from_year($year)
+    {
+        $this->from_year = $year;
+        return $this;
+    }
+
+    public function to_year($year)
+    {
+        $this->to_year = $year;
+        return $this;
+    }
+
+    public function response_format($format)
+    {
+        $this->response_format = $format;
+        return $this;
+    }
+
+    public function return_body()
+    {
+        $this->return_body = true;
+        $this->return_lead = false;
+        return $this;
+    }
+
+    public function return_lead()
+    {
+        $this->return_body = false;
+        $this->return_lead = true;
+        return $this;
+    }
+
+    public function order_by($order)
+    {
+        $this->order = $order;
+        return $this;
+    }
+
+    public function get()
+    {
+        $this->api_uri = $this->construct_uri();
+        $response = file_get_contents($this->api_uri);
+        echo "<pre>";
+        echo $response;
+        echo "</pre>";
+    }
+
+    // Private methods
+    private function construct_uri()
+    {
+        $uri = $this::BASE_URI . "ver={$this->version}";
+        if ($this->news_type != null)
+            $uri .= "&news_type={$this->news_type}";
+        if ($this->limit != null)
+            $uri .= "&limit={$this->limit}";
+        if ($this->offset != null)
+            $uri .= "&offset={$this->offset}";
+        if ($this->news_id != null)
+            $uri .= "&news_id{$this->news_id}";
+        if ($this->from_year != null)
+            $uri .= "&{from_year=$this->from_year}";
+        if ($this->to_year != null)
+            $uri .= "&{to_year=$this->to_year}";
+        if ($this->response_format != null)
+            $uri .= "&{response_format=$this->response_format}";
+        if ($this->return_body)
+            $uri .= "&return_body=true";
+        if ($this->return_lead)
+            $uri .= "&return_lead=true";
+        if ($this->order != null)
+            $uri .= "&order={$this->order}";
+        return $uri;
+    }
 }
